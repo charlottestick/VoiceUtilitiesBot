@@ -41,10 +41,10 @@ async def on_voice_state_update(member, before, after):
     if (member.bot != True) and (after.channel.name != "AFK"):
         if (before.channel != after.channel):
             response = str(member.name, "joined the voice channel", after.channel.name)
-            notifcationChannel.send(response)
+            print(response) # Dry running to check for logic errors
+            #notifcationChannel.send(response)
             #send message (member.name, "joined the voice channel", after.channel.name)
             # Not concerned with anything else for now
-            
 
 @client.event
 async def on_error():
