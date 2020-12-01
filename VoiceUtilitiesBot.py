@@ -13,6 +13,8 @@ def time_print(event):
     print(log_text)
 
 first_connect = True
+notificationChannelID = 689543498596220940
+notificationChannel = client.get_channel(notificationChannelID)
 
 @client.event
 async def on_connect():
@@ -33,6 +35,16 @@ async def on_ready():
         first_connect = False
     else:
         time_print("connections ; reconnect")
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    if (member.bot != True) and (after.channel.name != "AFK"):
+        if (before.channel != after.channel):
+            response = str(member.name, "joined the voice channel", after.channel.name)
+            notifcationChannel.send(response)
+            #send message (member.name, "joined the voice channel", after.channel.name)
+            # Not concerned with anything else for now
+            
 
 @client.event
 async def on_error():
