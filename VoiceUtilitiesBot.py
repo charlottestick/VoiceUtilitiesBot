@@ -1,7 +1,6 @@
 import discord
 import time
 import sys
-from dotenv import load_dotenv #Needs to be installed/added to requirements
 
 client = discord.Client()
 
@@ -56,8 +55,10 @@ async def on_disconnect():
     statement = ("error       ; ") + str(sys.exc_info()[1])
     time_print(statement)
 
-load_dotenv()
-token = os.getenv("TOKEN")
+f = open("token.txt")
+token = f.readline()
+f.close()
 client.run(token)
+token = None
 
 time_print("connections ; final close")
