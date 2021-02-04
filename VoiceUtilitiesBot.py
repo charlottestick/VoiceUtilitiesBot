@@ -12,8 +12,12 @@ def time_print(event):
     print(log_text)
 
 first_connect = True
-notificationChannelID = 689543498596220940
-notificationChannel = client.get_channel(notificationChannelID)
+
+channels = client.get_all_channels()
+for i in channels:
+    print(i)
+    if (i.name == "voice-channel-notifications"):
+        notificationChannel = i
 
 @client.event
 async def on_connect():
@@ -37,13 +41,17 @@ async def on_ready():
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    if (member.bot != True) and (after.channel.name != "AFK"):
-        if (before.channel != after.channel):
-            response = str(member.name, "joined the voice channel", after.channel.name)
-            print(response) # Dry running to check for logic errors
-            #notifcationChannel.send(response)
-            #send message (member.name, "joined the voice channel", after.channel.name)
-            # Not concerned with anything else for now
+    if (member.bot == False):
+        try :
+            channelName = after.channel.name
+        except AttributeError:
+            response = ("Goodbye, ") + str(member.nick) + ("!")
+        else:
+            if (channelName != "AFK") and  (before.channel != after.channel):
+                response = str(member.nick) + (" joined the voice channel ") + str(after.channel.name) + ("!")
+        #notificationChannel.send(response)
+        log_text = ("response    ; ") + response
+        time_print(log_text)
 
 @client.event
 async def on_error():
