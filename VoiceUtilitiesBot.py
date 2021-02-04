@@ -12,20 +12,18 @@ def time_print(event):
     print(log_text)
 
 first_connect = True
-
-channels = client.get_all_channels()
-for i in channels:
-    print(i)
-    if (i.name == "voice-channel-notifications"):
-        notificationChannel = i
+notificationsChannelId = 780532234394009712
+notificationsChannel = None
 
 @client.event
 async def on_connect():
-	time_print("connections ; started")
+    time_print("connections ; started")
+
 
 @client.event
 async def on_ready():
     global first_connect
+    global notificationsChannel
     if first_connect == True:
         log_text = ("connections ; ")
         i = 0
@@ -39,6 +37,10 @@ async def on_ready():
     else:
         time_print("connections ; reconnect")
 
+    notificationsChannel = client.guilds[0].get_channel(notificationsChannelId)
+    log_text = ("channel     ; ") + notificationsChannel.name
+    time_print(log_text)
+
 @client.event
 async def on_voice_state_update(member, before, after):
     if (member.bot == False):
@@ -49,9 +51,10 @@ async def on_voice_state_update(member, before, after):
         else:
             if (channelName != "AFK") and  (before.channel != after.channel):
                 response = str(member.nick) + (" joined the voice channel ") + str(after.channel.name) + ("!")
-        #notificationChannel.send(response)
         log_text = ("response    ; ") + response
         time_print(log_text)
+        global notificationsChannel
+        await notificationsChannel.send(response)
 
 @client.event
 async def on_error():
