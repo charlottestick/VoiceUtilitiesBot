@@ -1,6 +1,5 @@
 import discord
 import time
-import sys
 
 client = discord.Client()
 
@@ -24,6 +23,7 @@ async def on_connect():
 async def on_ready():
     global first_connect
     global notificationsChannel
+
     if first_connect == True:
         log_text = ("connections ; ")
         i = 0
@@ -36,10 +36,7 @@ async def on_ready():
         first_connect = False
     else:
         time_print("connections ; reconnect")
-
     notificationsChannel = client.guilds[0].get_channel(notificationsChannelId)
-    log_text = ("channel     ; ") + notificationsChannel.name
-    time_print(log_text)
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -47,10 +44,11 @@ async def on_voice_state_update(member, before, after):
         try :
             channelName = after.channel.name
         except AttributeError:
-            response = ("Goodbye, ") + str(member.nick) + ("!")
+            response = ("Goodbye, ") + str(member.display_name) + ("!")
         else:
             if (channelName != "AFK") and  (before.channel != after.channel):
-                response = str(member.nick) + (" joined the voice channel ") + str(after.channel.name) + ("!")
+                response = str(member.display_name) + (" joined the voice channel ") + str(after.channel.name) + ("!")
+
         log_text = ("response    ; ") + response
         time_print(log_text)
         global notificationsChannel
@@ -62,9 +60,7 @@ async def on_error():
 
 @client.event
 async def on_disconnect():
-    time_print("connections ; disconnect")
-    statement = ("error       ; ") + str(sys.exc_info()[1])
-    time_print(statement)
+    time_print("error       ; disconnect")
 
 f = open("token.txt")
 token = f.readline()
