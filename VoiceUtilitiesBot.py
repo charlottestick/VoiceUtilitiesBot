@@ -39,6 +39,10 @@ async def on_ready():
     notificationsChannel = client.guilds[0].get_channel(notificationsChannelId)
 
 @client.event
+async def on_resume():
+    time_print("connections ; resume")
+
+@client.event
 async def on_voice_state_update(member, before, after):
     if (member.bot == False):
         try :
@@ -58,9 +62,10 @@ async def on_voice_state_update(member, before, after):
 async def on_error():
     time_print("error       ; caught")
 
-@client.event
-async def on_disconnect():
-    time_print("error       ; disconnect")
+#@client.event
+#async def on_disconnect():
+    #time_print("error       ; disconnect")
+    #Disabled as it occurred too frequently to be a significant error, and disconnecting has no apparent effect
 
 f = open("token.txt")
 token = f.readline()
