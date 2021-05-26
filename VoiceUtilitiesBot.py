@@ -67,7 +67,7 @@ async def on_error():
     #time_print("error       ; disconnect")
     #Disabled as it occurred too frequently to be a significant error, and disconnecting has no apparent effect
 
-f = open("token.txt")
+f = open("token.txt") # This is probably a very unsafe way to store and load the token, but I don't know what's better
 token = f.readline()
 f.close()
 client.run(token)
